@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<metalib name="foo" version="3" >
+  <include file="common.xml" />
+  <struct name="Test1" version="1" desc="basic test" splittablekey="fchar,fint8" primarykey="fchar,fint8">
+    <entry name="fchar" type="char" defaultvalue="CMD_NOT_USED1" />
+    <entry name="fint8" type="tinyint" defaultvalue="-128" />
+    <entry name="fuint8" type="byte" defaultvalue="127" />
+    <entry name="fint16" type="short" defaultvalue="10" />
+    <entry name="fuint16" type="ushort" defaultvalue="50000" />
+    <entry name="fint32" type="int" defaultvalue="-1234567" />
+    <entry name="fuint32" type="uint" defaultvalue="3123456789" />
+    <entry name="fint64" type="int64" defaultvalue="-1233123456789" />
+    <entry name="fuint64" type="uint64" defaultvalue="1233123456789" />
+    <entry name="fdouble" type="double" defaultvalue="666666123.456789" />
+    <entry name="ffloat" type="float" defaultvalue="3456.456789" />
+    <entry name="fdate" type="date" defaultvalue="2014-03-28"/>
+    <entry name="ftime" type="time" defaultvalue="13:11:56" />
+    <entry name="fdatetime" type="datetime" defaultvalue="2014-04-01 13:30:59"/>
+    <entry name="fip" type="ip" defaultvalue="192.168.0.1" />
+    <entry name="fstring" type="string" size="64" defaultvalue="中文ABC" />
+    <index name="idx1" column="fchar,fint8" />
+    <index name="idx2" column="fchar,fint8" />
+    <index name="idx3" column="fchar,fint8" />
+  </struct>
+
+  <struct name="Test2" version="1" desc="array test" >
+    <entry name="item_num" type="Test1" />
+    <entry name="item_list1" type="int" count="100" />
+    <entry name="item_list2" type="int" count="100" refer="item_num.fint16"/>
+    <entry name="item_list3" type="Test1" count="CMD_NOT_USED2" refer="item_num.fint16"/>
+    <entry name="has_item2" type="int16" desc="item2????, 0 or 1"/>
+    <entry name="item2" type="Test1" count="1" refer="has_item2"/>
+  </struct>
+
+  <struct name="MsgHead" version="1" sizeinfo="headSize">
+    <entry name="magic" type="uint" defaultvalue="0" />
+    <entry name="version" type="ushort" defaultvalue="1" />
+    <entry name="headSize" type="uint" />
+    <entry name="bodySize" type="uint" />
+    <entry name="cmd" type="ushort" />
+  </struct>
+
+  <struct name="Body1" version="1">
+    <entry name="f1" type="int" defaultvalue="100" />
+    <entry name="f2" type="string" size="64" count="10" defaultvalue="AAA" />
+  </struct>
+
+  <struct name="Body2" version="2">
+    <entry name="f1" type="int" defaultvalue="500" />
+    <entry name="f2" type="char" count="10000000" version="3" />
+  </struct>
+
+  <union name="MsgBody" version="1">
+    <entry name="body1" type="Body1" id="CMD_START" />
+    <entry name="body2" type="Body2" id="CMD_END" version="2" />
+    <entry name="body3" type="int" id="3" version="2" />
+  </union>
+
+  <struct name="Msg" version="1" versionindicator="head.version" >
+    <entry name="head" type="MsgHead" customattr="@fval:magic=0x11223344"/>
+    <entry name ="body_refer" type="int" defaultvalue="3"/>
+    <entry name="body" type="MsgBody" select="head.cmd" count="3" refer="body_refer"/>
+  </struct>
+
+</metalib>

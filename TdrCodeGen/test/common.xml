@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<metalib name="foo" version="1" >
+<macrosgroup name="commands" desc="macrogroup组合">
+    <macro name="CMD_START" value="1" />
+    <macro name="CMD_END" value="2" />
+</macrosgroup>
+
+<macro name="CMD_NOT_USED1" desc="测试1" value="4"/>
+<macro name="CMD_NOT_USED2" desc="测试2" value="100"/>
+</metalib>
